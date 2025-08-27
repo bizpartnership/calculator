@@ -160,7 +160,6 @@
             border-radius: 10px;
             cursor: pointer;
             font-size: 1.2rem;
-            width: 100%;
             margin-top: 25px;
             transition: all 0.3s ease;
             box-shadow: 0 5px 15px rgba(74, 103, 65, 0.3);
@@ -176,6 +175,22 @@
             cursor: not-allowed;
             transform: none;
             box-shadow: none;
+        }
+
+        .btn-back {
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+            margin-right: 15px;
+        }
+
+        .btn-back:hover {
+            background: linear-gradient(135deg, #5a6268 0%, #343a40 100%);
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 25px;
         }
 
         .weights-display {
@@ -223,9 +238,9 @@
 
         .progress-bar {
             width: 100%;
-            height: 6px;
+            height: 8px;
             background: #e0e0e0;
-            border-radius: 3px;
+            border-radius: 4px;
             margin-bottom: 20px;
             overflow: hidden;
         }
@@ -233,8 +248,33 @@
         .progress-fill {
             height: 100%;
             background: linear-gradient(90deg, #4A6741 0%, #667eea 100%);
-            border-radius: 3px;
+            border-radius: 4px;
             transition: width 0.3s ease;
+        }
+
+        .question-counter {
+            text-align: center;
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+
+        .partner-section {
+            border-left-color: #D4A5A5;
+        }
+
+        .partner-section h3 {
+            margin: 30px 0 20px;
+        }
+
+        .question {
+            margin-bottom: 25px;
+        }
+
+        .question h4 {
+            margin-bottom: 15px;
+            color: #333;
+            font-size: 1.1rem;
         }
     </style>
 </head>
@@ -244,7 +284,7 @@
         <p class="subtitle">Справедливое распределение долей на основе реального вклада</p>
         
         <div class="progress-bar">
-            <div class="progress-fill" id="progress-fill" style="width: 20%"></div>
+            <div class="progress-fill" id="progress-fill" style="width: 10%"></div>
         </div>
 
         <!-- Шаг 1: Выбор способа настройки -->
@@ -280,6 +320,10 @@
                     Экономический: 60% • Человеческий: 30% • Социальный: 10%
                 </div>
             </div>
+            <div class="button-group">
+                <button class="btn btn-back" onclick="goBack()">← Назад</button>
+                <div></div>
+            </div>
         </div>
 
         <!-- Шаг 2B: Индивидуальная настройка -->
@@ -300,9 +344,13 @@
                     Клиентская база, полезные контакты
                 </div>
             </div>
+            <div class="button-group">
+                <button class="btn btn-back" onclick="goBack()">← Назад</button>
+                <div></div>
+            </div>
         </div>
 
-        <!-- Шаг 3: Процент для главного приоритета -->
+        <!-- Остальные шаги настройки (сокращены для краткости) -->
         <div class="section hidden" id="main-percent">
             <h2>📊 Шаг 2: Процент для главного приоритета</h2>
             <p id="main-priority-text" style="margin-bottom: 20px;"></p>
@@ -310,49 +358,12 @@
                 <label for="main-percentage">Введите процент (от 40 до 80):</label>
                 <input type="number" id="main-percentage" min="40" max="80" placeholder="например, 60">
             </div>
-            <button class="btn" onclick="setMainPercentage()">Продолжить</button>
+            <div class="button-group">
+                <button class="btn btn-back" onclick="goBack()">← Назад</button>
+                <button class="btn" onclick="setMainPercentage()">Продолжить →</button>
+            </div>
         </div>
 
-        <!-- Шаг 4: Второй приоритет -->
-        <div class="section hidden" id="second-priority">
-            <h2>🥈 Шаг 3: Второй приоритет</h2>
-            <div class="weights-display">
-                <p><span id="first-priority-name"></span>: <strong><span id="first-percent">0</span>%</strong></p>
-                <p>Осталось распределить: <strong><span id="remaining-percent">100</span>%</strong></p>
-            </div>
-            <p style="margin-bottom: 20px;">Что поставите на второе место?</p>
-            <div class="priority-buttons" id="second-priority-options"></div>
-        </div>
-
-        <!-- Шаг 5: Процент для второго приоритета -->
-        <div class="section hidden" id="second-percent">
-            <h2>📊 Шаг 4: Процент для второго приоритета</h2>
-            <div class="weights-display">
-                <p><span id="first-priority-name2"></span>: <strong><span id="first-percent2">0</span>%</strong></p>
-                <p>Осталось: <strong><span id="remaining-percent2">100</span>%</strong></p>
-            </div>
-            <p id="second-priority-text" style="margin-bottom: 20px;"></p>
-            <div class="input-group">
-                <label for="second-percentage">Введите процент (от 10 до <span id="max-second">90</span>):</label>
-                <input type="number" id="second-percentage" min="10" placeholder="например, 30">
-            </div>
-            <button class="btn" onclick="setSecondPercentage()">Продолжить</button>
-        </div>
-
-        <!-- Шаг 6: Итоговое распределение -->
-        <div class="section hidden" id="final-weights">
-            <h2>✅ Ваше распределение весов</h2>
-            <div class="weights-display">
-                <p>💰 Экономический: <strong><span id="final-economic">0</span>%</strong></p>
-                <p>🧠 Человеческий: <strong><span id="final-human">0</span>%</strong></p>
-                <p>🤝 Социальный: <strong><span id="final-social">0</span>%</strong></p>
-                <hr style="margin: 15px 0;">
-                <p><strong>Итого: 100%</strong></p>
-            </div>
-            <button class="btn" onclick="showPartnerSelection()">Продолжить к оценке партнеров</button>
-        </div>
-
-        <!-- Остальные секции партнеров остаются как в оригинале... -->
         <!-- Блок выбора количества партнеров -->
         <div class="section hidden" id="partner-count-section">
             <h2>👥 Количество партнеров</h2>
@@ -368,35 +379,245 @@
                     <strong>4 партнера</strong>
                 </div>
             </div>
+            <div class="button-group">
+                <button class="btn btn-back" onclick="goBack()">← Назад</button>
+                <div></div>
+            </div>
         </div>
 
-        <!-- Блок партнера 1 (сокращенная версия для примера) -->
-        <div class="section partner-section hidden" id="partner1-section">
-            <h2>👤 ПАРТНЕР 1</h2>
+        <!-- Блок оценки партнеров -->
+        <div class="section partner-section hidden" id="partner-evaluation">
+            <h2 id="partner-title">👤 ПАРТНЕР 1</h2>
+            <div class="question-counter" id="question-counter">Вопрос 1 из 12</div>
             
-            <h3 style="color: #4A6741; margin: 20px 0;">💰 Экономический капитал</h3>
-            
-            <div style="margin-bottom: 20px;">
-                <h3>Стартовый капитал?</h3>
+            <!-- Экономический капитал -->
+            <div class="question" id="q1">
+                <h3 style="color: #4A6741;">💰 Экономический капитал</h3>
+                <h4>Сколько денег готов вложить в стартовый капитал?</h4>
                 <div class="options">
-                    <div class="option" onclick="selectOption(this, 'p1_startup_money', 0)">
-                        <input type="radio" name="p1_startup_money" value="0"> 0 ₽
+                    <div class="option" onclick="selectAnswer('startup_money', 0)">
+                        <input type="radio" name="startup_money" value="0"> 0 ₽
                     </div>
-                    <div class="option" onclick="selectOption(this, 'p1_startup_money', 25)">
-                        <input type="radio" name="p1_startup_money" value="25"> До 1 млн ₽
+                    <div class="option" onclick="selectAnswer('startup_money', 25)">
+                        <input type="radio" name="startup_money" value="25"> До 1 млн ₽
                     </div>
-                    <div class="option" onclick="selectOption(this, 'p1_startup_money', 50)">
-                        <input type="radio" name="p1_startup_money" value="50"> 1-5 млн ₽
+                    <div class="option" onclick="selectAnswer('startup_money', 50)">
+                        <input type="radio" name="startup_money" value="50"> 1-5 млн ₽
                     </div>
-                    <div class="option" onclick="selectOption(this, 'p1_startup_money', 75)">
-                        <input type="radio" name="p1_startup_money" value="75"> Более 5 млн ₽
+                    <div class="option" onclick="selectAnswer('startup_money', 75)">
+                        <input type="radio" name="startup_money" value="75"> Более 5 млн ₽
                     </div>
                 </div>
             </div>
 
-            <!-- Здесь добавить остальные 11 вопросов... -->
-            
-            <button class="btn" onclick="showResults()">Рассчитать доли</button>
+            <div class="question hidden" id="q2">
+                <h4>Какое оборудование/помещение/активы приносит?</h4>
+                <div class="options">
+                    <div class="option" onclick="selectAnswer('assets', 0)">
+                        <input type="radio" name="assets" value="0"> Ничего
+                    </div>
+                    <div class="option" onclick="selectAnswer('assets', 20)">
+                        <input type="radio" name="assets" value="20"> До 1 млн ₽
+                    </div>
+                    <div class="option" onclick="selectAnswer('assets', 40)">
+                        <input type="radio" name="assets" value="40"> 1-3 млн ₽
+                    </div>
+                    <div class="option" onclick="selectAnswer('assets', 60)">
+                        <input type="radio" name="assets" value="60"> Более 3 млн ₽
+                    </div>
+                </div>
+            </div>
+
+            <div class="question hidden" id="q3">
+                <h4>Есть ли готовый товарный знак/бренд/интеллектуальная собственность?</h4>
+                <div class="options">
+                    <div class="option" onclick="selectAnswer('brand', 0)">
+                        <input type="radio" name="brand" value="0"> Нет
+                    </div>
+                    <div class="option" onclick="selectAnswer('brand', 15)">
+                        <input type="radio" name="brand" value="15"> Есть идея/концепция
+                    </div>
+                    <div class="option" onclick="selectAnswer('brand', 30)">
+                        <input type="radio" name="brand" value="30"> Есть товарный знак
+                    </div>
+                    <div class="option" onclick="selectAnswer('brand', 45)">
+                        <input type="radio" name="brand" value="45"> Есть готовый бренд с репутацией
+                    </div>
+                </div>
+            </div>
+
+            <div class="question hidden" id="q4">
+                <h4>Готов ли доинвестировать в случае кризиса?</h4>
+                <div class="options">
+                    <div class="option" onclick="selectAnswer('reinvest', 0)">
+                        <input type="radio" name="reinvest" value="0"> Нет возможности
+                    </div>
+                    <div class="option" onclick="selectAnswer('reinvest', 10)">
+                        <input type="radio" name="reinvest" value="10"> До 500 тыс ₽
+                    </div>
+                    <div class="option" onclick="selectAnswer('reinvest', 20)">
+                        <input type="radio" name="reinvest" value="20"> 500 тыс - 2 млн ₽
+                    </div>
+                    <div class="option" onclick="selectAnswer('reinvest', 30)">
+                        <input type="radio" name="reinvest" value="30"> Более 2 млн ₽
+                    </div>
+                </div>
+            </div>
+
+            <!-- Человеческий капитал -->
+            <div class="question hidden" id="q5">
+                <h3 style="color: #4A6741;">🧠 Человеческий капитал</h3>
+                <h4>Сколько часов в неделю планирует работать в проекте?</h4>
+                <div class="options">
+                    <div class="option" onclick="selectAnswer('time', 20)">
+                        <input type="radio" name="time" value="20"> 10-20 часов
+                    </div>
+                    <div class="option" onclick="selectAnswer('time', 40)">
+                        <input type="radio" name="time" value="40"> 20-40 часов
+                    </div>
+                    <div class="option" onclick="selectAnswer('time', 60)">
+                        <input type="radio" name="time" value="60"> 40-60 часов
+                    </div>
+                    <div class="option" onclick="selectAnswer('time', 80)">
+                        <input type="radio" name="time" value="80"> Более 60 часов
+                    </div>
+                </div>
+            </div>
+
+            <div class="question hidden" id="q6">
+                <h4>Опыт работы в этой сфере?</h4>
+                <div class="options">
+                    <div class="option" onclick="selectAnswer('experience', 15)">
+                        <input type="radio" name="experience" value="15"> До 2 лет
+                    </div>
+                    <div class="option" onclick="selectAnswer('experience', 35)">
+                        <input type="radio" name="experience" value="35"> 2-5 лет
+                    </div>
+                    <div class="option" onclick="selectAnswer('experience', 55)">
+                        <input type="radio" name="experience" value="55"> 5-10 лет
+                    </div>
+                    <div class="option" onclick="selectAnswer('experience', 75)">
+                        <input type="radio" name="experience" value="75"> Более 10 лет
+                    </div>
+                </div>
+            </div>
+
+            <div class="question hidden" id="q7">
+                <h4>Какую зарплату получал на последнем месте работы?</h4>
+                <div class="options">
+                    <div class="option" onclick="selectAnswer('salary', 15)">
+                        <input type="radio" name="salary" value="15"> До 100 тыс ₽
+                    </div>
+                    <div class="option" onclick="selectAnswer('salary', 35)">
+                        <input type="radio" name="salary" value="35"> 100-300 тыс ₽
+                    </div>
+                    <div class="option" onclick="selectAnswer('salary', 55)">
+                        <input type="radio" name="salary" value="55"> 300-500 тыс ₽
+                    </div>
+                    <div class="option" onclick="selectAnswer('salary', 75)">
+                        <input type="radio" name="salary" value="75"> Более 500 тыс ₽
+                    </div>
+                </div>
+            </div>
+
+            <div class="question hidden" id="q8">
+                <h4>Какие уникальные навыки приносит в проект?</h4>
+                <div class="options">
+                    <div class="option" onclick="selectAnswer('skills', 15)">
+                        <input type="radio" name="skills" value="15"> Общие навыки
+                    </div>
+                    <div class="option" onclick="selectAnswer('skills', 35)">
+                        <input type="radio" name="skills" value="35"> Специализированные навыки
+                    </div>
+                    <div class="option" onclick="selectAnswer('skills', 55)">
+                        <input type="radio" name="skills" value="55"> Экспертные навыки
+                    </div>
+                    <div class="option" onclick="selectAnswer('skills', 75)">
+                        <input type="radio" name="skills" value="75"> Уникальная экспертиза
+                    </div>
+                </div>
+            </div>
+
+            <!-- Социальный капитал -->
+            <div class="question hidden" id="q9">
+                <h3 style="color: #4A6741;">🤝 Социальный капитал</h3>
+                <h4>Сколько потенциальных клиентов может привести?</h4>
+                <div class="options">
+                    <div class="option" onclick="selectAnswer('clients', 0)">
+                        <input type="radio" name="clients" value="0"> 0 клиентов
+                    </div>
+                    <div class="option" onclick="selectAnswer('clients', 25)">
+                        <input type="radio" name="clients" value="25"> 1-10 клиентов
+                    </div>
+                    <div class="option" onclick="selectAnswer('clients', 50)">
+                        <input type="radio" name="clients" value="50"> 10-50 клиентов
+                    </div>
+                    <div class="option" onclick="selectAnswer('clients', 75)">
+                        <input type="radio" name="clients" value="75"> Более 50 клиентов
+                    </div>
+                </div>
+            </div>
+
+            <div class="question hidden" id="q10">
+                <h4>Какие полезные связи есть у партнера?</h4>
+                <div class="options">
+                    <div class="option" onclick="selectAnswer('connections', 0)">
+                        <input type="radio" name="connections" value="0"> Нет связей в отрасли
+                    </div>
+                    <div class="option" onclick="selectAnswer('connections', 25)">
+                        <input type="radio" name="connections" value="25"> Несколько знакомых
+                    </div>
+                    <div class="option" onclick="selectAnswer('connections', 50)">
+                        <input type="radio" name="connections" value="50"> Хорошая сеть контактов
+                    </div>
+                    <div class="option" onclick="selectAnswer('connections', 75)">
+                        <input type="radio" name="connections" value="75"> Влиятельные связи
+                    </div>
+                </div>
+            </div>
+
+            <div class="question hidden" id="q11">
+                <h4>Репутация в профессиональной среде?</h4>
+                <div class="options">
+                    <div class="option" onclick="selectAnswer('reputation', 0)">
+                        <input type="radio" name="reputation" value="0"> Неизвестен
+                    </div>
+                    <div class="option" onclick="selectAnswer('reputation', 25)">
+                        <input type="radio" name="reputation" value="25"> Знают в узких кругах
+                    </div>
+                    <div class="option" onclick="selectAnswer('reputation', 50)">
+                        <input type="radio" name="reputation" value="50"> Хорошая репутация в отрасли
+                    </div>
+                    <div class="option" onclick="selectAnswer('reputation', 75)">
+                        <input type="radio" name="reputation" value="75"> Топовый эксперт/лидер мнений
+                    </div>
+                </div>
+            </div>
+
+            <div class="question hidden" id="q12">
+                <h4>Готов ли активно продвигать проект в своих сетях?</h4>
+                <div class="options">
+                    <div class="option" onclick="selectAnswer('promotion', 0)">
+                        <input type="radio" name="promotion" value="0"> Нет
+                    </div>
+                    <div class="option" onclick="selectAnswer('promotion', 15)">
+                        <input type="radio" name="promotion" value="15"> Иногда
+                    </div>
+                    <div class="option" onclick="selectAnswer('promotion', 30)">
+                        <input type="radio" name="promotion" value="30"> Регулярно
+                    </div>
+                    <div class="option" onclick="selectAnswer('promotion', 45)">
+                        <input type="radio" name="promotion" value="45"> Буду главным амбассадором
+                    </div>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button class="btn btn-back" onclick="goBack()" id="back-btn">← Назад</button>
+                <button class="btn" onclick="nextQuestion()" id="next-btn" style="display: none;">Далее →</button>
+                <button class="btn" onclick="nextPartner()" id="partner-btn" style="display: none;">Следующий партнер →</button>
+                <button class="btn" onclick="calculateResults()" id="calculate-btn" style="display: none;">Рассчитать результат →</button>
+            </div>
         </div>
 
         <!-- Блок результатов -->
@@ -409,69 +630,99 @@
                 <p>Запишитесь на консультацию для проработки партнерского соглашения</p>
                 <p><strong>Telegram: @baboshkinavero</strong></p>
             </div>
+
+            <div class="button-group" style="margin-top: 30px;">
+                <button class="btn btn-back" onclick="startOver()">🔄 Начать заново</button>
+                <div></div>
+            </div>
         </div>
     </div>
 
     <script>
+        // Глобальные переменные
+        let currentStep = 'setup-method';
+        let navigationHistory = [];
         let setupType = '';
         let mainPriorityType = '';
         let weights = { economic: 33, human: 33, social: 34 };
         let totalPartners = 2;
-        let partnersData = [{}];
-
+        let currentPartnerIndex = 0;
+        let currentQuestion = 1;
+        let partnersData = [];
+        
         const priorityNames = {
             'economic': '💰 Экономический капитал',
             'human': '🧠 Человеческий капитал', 
             'social': '🤝 Социальный капитал'
         };
 
-        function updateProgress(step) {
-            const progressFill = document.getElementById('progress-fill');
-            const steps = ['setup-method', 'priority-selection', 'main-percent', 'second-priority', 'second-percent', 'final-weights', 'partner-evaluation', 'results'];
-            const progress = (step / steps.length) * 100;
-            progressFill.style.width = progress + '%';
+        const stepProgress = {
+            'setup-method': 10,
+            'quick-setup': 20,
+            'custom-setup': 20,
+            'main-percent': 30,
+            'partner-count-section': 40,
+            'partner-evaluation': 70,
+            'results-section': 100
+        };
+
+        // Инициализация
+        function init() {
+            partnersData = Array(4).fill(null).map(() => ({}));
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const progress = stepProgress[currentStep] || 10;
+            document.getElementById('progress-fill').style.width = progress + '%';
+        }
+
+        function showStep(stepId) {
+            // Скрыть все секции
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // Показать нужную секцию
+            document.getElementById(stepId).classList.remove('hidden');
+            currentStep = stepId;
+            updateProgress();
+        }
+
+        function goBack() {
+            if (navigationHistory.length > 0) {
+                const previousStep = navigationHistory.pop();
+                showStep(previousStep);
+            }
+        }
+
+        function navigateTo(stepId) {
+            navigationHistory.push(currentStep);
+            showStep(stepId);
         }
 
         function selectSetupMethod(type) {
             setupType = type;
-            document.getElementById('setup-method').classList.add('hidden');
-            
-            if (type === 'quick') {
-                document.getElementById('quick-setup').classList.remove('hidden');
-            } else {
-                document.getElementById('custom-setup').classList.remove('hidden');
-            }
-            updateProgress(1);
+            navigateTo(type === 'quick' ? 'quick-setup' : 'custom-setup');
         }
 
         function selectQuickOption(economic, human, social) {
             weights = { economic, human, social };
-            
-            document.getElementById('final-economic').textContent = economic;
-            document.getElementById('final-human').textContent = human;
-            document.getElementById('final-social').textContent = social;
-            
-            document.getElementById('quick-setup').classList.add('hidden');
-            document.getElementById('final-weights').classList.remove('hidden');
-            updateProgress(5);
+            navigateTo('partner-count-section');
         }
 
         function selectMainPriority(type) {
             mainPriorityType = type;
             
-            // Подсветить выбор
             document.querySelectorAll('#main-priority .priority-btn').forEach(btn => {
                 btn.classList.remove('selected');
             });
             event.target.classList.add('selected');
             
-            // Показать следующий шаг
             document.getElementById('main-priority-text').textContent = 
                 `${priorityNames[type]} - ваш главный приоритет. Какой процент отдать этому направлению?`;
             
-            document.getElementById('custom-setup').classList.add('hidden');
-            document.getElementById('main-percent').classList.remove('hidden');
-            updateProgress(2);
+            navigateTo('main-percent');
         }
 
         function setMainPercentage() {
@@ -482,132 +733,218 @@
                 return;
             }
 
-            // Показать второй приоритет
-            document.getElementById('first-priority-name').textContent = priorityNames[mainPriorityType];
-            document.getElementById('first-percent').textContent = percentage;
-            document.getElementById('remaining-percent').textContent = 100 - percentage;
-
-            // Создать кнопки для оставшихся приоритетов
-            const secondOptions = document.getElementById('second-priority-options');
-            secondOptions.innerHTML = '';
-
-            const remainingPriorities = Object.keys(priorityNames).filter(p => p !== mainPriorityType);
+            weights[mainPriorityType] = percentage;
             
-            remainingPriorities.forEach(priority => {
-                const btn = document.createElement('div');
-                btn.className = 'priority-btn';
-                btn.innerHTML = `<strong>${priorityNames[priority]}</strong>`;
-                btn.onclick = () => selectSecondPriority(priority, percentage);
-                secondOptions.appendChild(btn);
-            });
-
-            document.getElementById('main-percent').classList.add('hidden');
-            document.getElementById('second-priority').classList.remove('hidden');
-            updateProgress(3);
-        }
-
-        function selectSecondPriority(type, firstPercent) {
-            // Подсветить выбор
-            document.querySelectorAll('#second-priority-options .priority-btn').forEach(btn => {
-                btn.classList.remove('selected');
-            });
-            event.target.classList.add('selected');
-
-            document.getElementById('first-priority-name2').textContent = priorityNames[mainPriorityType];
-            document.getElementById('first-percent2').textContent = firstPercent;
-            document.getElementById('remaining-percent2').textContent = 100 - firstPercent;
-            document.getElementById('max-second').textContent = 100 - firstPercent - 10;
-
-            document.getElementById('second-priority-text').textContent = 
-                `${priorityNames[type]} - второй приоритет. Сколько процентов выделить?`;
-
-            document.getElementById('second-percent').setAttribute('data-second-type', type);
-            document.getElementById('second-percent').setAttribute('data-first-percent', firstPercent);
+            // Автоматически распределить остаток поровну между двумя другими
+            const remaining = 100 - percentage;
+            const otherPriorities = Object.keys(priorityNames).filter(p => p !== mainPriorityType);
             
-            document.getElementById('second-priority').classList.add('hidden');
-            document.getElementById('second-percent').classList.remove('hidden');
-            updateProgress(4);
-        }
+            weights[otherPriorities[0]] = Math.floor(remaining / 2);
+            weights[otherPriorities[1]] = remaining - Math.floor(remaining / 2);
 
-        function setSecondPercentage() {
-            const secondPercent = parseInt(document.getElementById('second-percentage').value);
-            const firstPercent = parseInt(document.getElementById('second-percent').getAttribute('data-first-percent'));
-            const secondType = document.getElementById('second-percent').getAttribute('data-second-type');
-            const maxSecond = 100 - firstPercent - 10;
-
-            if (!secondPercent || secondPercent < 10 || secondPercent > maxSecond) {
-                alert(`Пожалуйста, введите процент от 10 до ${maxSecond}`);
-                return;
-            }
-
-            // Рассчитать финальное распределение
-            const thirdPercent = 100 - firstPercent - secondPercent;
-            const allPriorities = ['economic', 'human', 'social'];
-            const thirdType = allPriorities.find(p => p !== mainPriorityType && p !== secondType);
-
-            weights[mainPriorityType] = firstPercent;
-            weights[secondType] = secondPercent;
-            weights[thirdType] = thirdPercent;
-
-            // Показать финальное распределение
-            document.getElementById('final-economic').textContent = weights.economic;
-            document.getElementById('final-human').textContent = weights.human;
-            document.getElementById('final-social').textContent = weights.social;
-
-            document.getElementById('second-percent').classList.add('hidden');
-            document.getElementById('final-weights').classList.remove('hidden');
-            updateProgress(5);
-        }
-
-        function showPartnerSelection() {
-            document.getElementById('final-weights').classList.add('hidden');
-            document.getElementById('partner-count-section').classList.remove('hidden');
-            updateProgress(6);
+            navigateTo('partner-count-section');
         }
 
         function setPartnerCount(count) {
             totalPartners = count;
             partnersData = Array(count).fill(null).map(() => ({}));
+            currentPartnerIndex = 0;
+            currentQuestion = 1;
             
-            document.getElementById('partner-count-section').classList.add('hidden');
-            document.getElementById('partner1-section').classList.remove('hidden');
-            updateProgress(7);
+            updateQuestionDisplay();
+            navigateTo('partner-evaluation');
         }
 
-        function selectOption(element, field, value) {
+        function updateQuestionDisplay() {
+            // Обновить заголовок партнера
+            document.getElementById('partner-title').textContent = `👤 ПАРТНЕР ${currentPartnerIndex + 1}`;
+            
+            // Обновить счетчик вопросов
+            document.getElementById('question-counter').textContent = `Вопрос ${currentQuestion} из 12`;
+            
+            // Скрыть все вопросы
+            document.querySelectorAll('.question').forEach(q => q.classList.add('hidden'));
+            
+            // Показать текущий вопрос
+            document.getElementById(`q${currentQuestion}`).classList.remove('hidden');
+            
+            // Очистить выбор
+            clearCurrentSelection();
+            
+            // Обновить кнопки
+            updateNavigationButtons();
+        }
+
+        function clearCurrentSelection() {
+            const currentQuestionElement = document.getElementById(`q${currentQuestion}`);
+            if (currentQuestionElement) {
+                currentQuestionElement.querySelectorAll('.option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                currentQuestionElement.querySelectorAll('input[type="radio"]').forEach(radio => {
+                    radio.checked = false;
+                });
+            }
+        }
+
+        function updateNavigationButtons() {
+            const nextBtn = document.getElementById('next-btn');
+            const partnerBtn = document.getElementById('partner-btn');
+            const calculateBtn = document.getElementById('calculate-btn');
+            
+            // Скрыть все кнопки
+            nextBtn.style.display = 'none';
+            partnerBtn.style.display = 'none';
+            calculateBtn.style.display = 'none';
+            
+            // Показать нужную кнопку
+            if (currentQuestion < 12) {
+                nextBtn.style.display = 'block';
+            } else if (currentPartnerIndex < totalPartners - 1) {
+                partnerBtn.style.display = 'block';
+            } else {
+                calculateBtn.style.display = 'block';
+            }
+        }
+
+        function selectAnswer(field, value) {
             // Подсветить выбор
-            element.parentNode.querySelectorAll('.option').forEach(opt => {
+            const currentQuestionElement = document.getElementById(`q${currentQuestion}`);
+            currentQuestionElement.querySelectorAll('.option').forEach(opt => {
                 opt.classList.remove('selected');
             });
-            element.classList.add('selected');
-            element.querySelector('input').checked = true;
+            event.target.closest('.option').classList.add('selected');
+            event.target.querySelector('input').checked = true;
             
             // Сохранить значение
-            if (!partnersData[0]) partnersData[0] = {};
-            partnersData[0][field] = value;
+            if (!partnersData[currentPartnerIndex]) {
+                partnersData[currentPartnerIndex] = {};
+            }
+            partnersData[currentPartnerIndex][field] = value;
+            
+            // Показать кнопку навигации
+            updateNavigationButtons();
         }
 
-        function showResults() {
-            // Простой расчет для демонстрации
-            const economic = partnersData[0].startup_money || 0;
-            const human = 50; // Средний балл
-            const social = 25; // Средний балл
-            
-            const weighted = (economic * weights.economic / 100) + (human * weights.human / 100) + (social * weights.social / 100);
-            
-            document.getElementById('all-results').innerHTML = `
-                <div class="result-item">
-                    <h3>👤 ПАРТНЕР 1</h3>
-                    <p><strong>100% долей</strong></p>
-                    <p>Экономический: ${Math.round(economic)} • Человеческий: ${Math.round(human)} • Социальный: ${Math.round(social)}</p>
-                </div>
-                <p style="text-align: center; margin-top: 20px; color: #666;">
-                   
-            
-            document.getElementById('partner1-section').classList.add('hidden');
-            document.getElementById('results-section').classList.remove('hidden');
-            updateProgress(8);
+        function nextQuestion() {
+            if (currentQuestion < 12) {
+                currentQuestion++;
+                updateQuestionDisplay();
+            }
         }
+
+        function nextPartner() {
+            if (currentPartnerIndex < totalPartners - 1) {
+                currentPartnerIndex++;
+                currentQuestion = 1;
+                updateQuestionDisplay();
+            }
+        }
+
+        function calculateResults() {
+            // Проверить что все партнеры оценены
+            for (let i = 0; i < totalPartners; i++) {
+                const data = partnersData[i];
+                const requiredFields = ['startup_money', 'assets', 'brand', 'reinvest', 'time', 'experience', 'salary', 'skills', 'clients', 'connections', 'reputation', 'promotion'];
+                
+                for (let field of requiredFields) {
+                    if (data[field] === undefined) {
+                        alert(`Пожалуйста, ответьте на все вопросы для Партнера ${i + 1}`);
+                        return;
+                    }
+                }
+            }
+
+            // Расчет долей
+            let results = [];
+            let totalWeighted = 0;
+
+            for (let i = 0; i < totalPartners; i++) {
+                const data = partnersData[i];
+                
+                const economic = (data.startup_money || 0) + (data.assets || 0) + (data.brand || 0) + (data.reinvest || 0);
+                const human = (data.time || 0) + (data.experience || 0) + (data.salary || 0) + (data.skills || 0);
+                const social = (data.clients || 0) + (data.connections || 0) + (data.reputation || 0) + (data.promotion || 0);
+
+                const weighted = (economic * weights.economic / 100) + (human * weights.human / 100) + (social * weights.social / 100);
+                
+                results.push({
+                    weighted: weighted,
+                    economic: economic,
+                    human: human,
+                    social: social
+                });
+                
+                totalWeighted += weighted;
+            }
+
+            // Отображение результатов
+            const allResultsDiv = document.getElementById('all-results');
+            allResultsDiv.innerHTML = '';
+
+            for (let i = 0; i < totalPartners; i++) {
+                const share = Math.round((results[i].weighted / totalWeighted) * 100);
+                
+                const resultDiv = document.createElement('div');
+                resultDiv.className = 'result-item';
+                resultDiv.innerHTML = `
+                    <h3>👤 ПАРТНЕР ${i + 1}</h3>
+                    <p><strong>${share}% долей</strong></p>
+                    <p>Экономический: ${Math.round(results[i].economic)} • Человеческий: ${Math.round(results[i].human)} • Социальный: ${Math.round(results[i].social)}</p>
+                `;
+                allResultsDiv.appendChild(resultDiv);
+            }
+
+            // Добавить рекомендации
+            const maxShare = Math.max(...results.map((r, i) => Math.round((r.weighted / totalWeighted) * 100)));
+            const minShare = Math.min(...results.map((r, i) => Math.round((r.weighted / totalWeighted) * 100)));
+            
+            let recommendation = '';
+            if (maxShare - minShare <= 15) {
+                recommendation = 'Партнеры имеют примерно равный вклад. Рекомендуется равное или близкое к равному распределение долей.';
+            } else {
+                recommendation = 'Значительная разница во вкладах партнеров. Рекомендуется обсудить справедливость распределения на основе расчета.';
+            }
+
+            const recommendationDiv = document.createElement('div');
+            recommendationDiv.innerHTML = `<p style="margin-top: 20px; padding: 15px; background: #fff3cd; border-radius: 8px; border-left: 4px solid #ffc107;"><strong>💡 Рекомендация:</strong> ${recommendation}</p>`;
+            allResultsDiv.appendChild(recommendationDiv);
+
+            navigateTo('results-section');
+        }
+
+        function startOver() {
+            // Сбросить все данные
+            currentStep = 'setup-method';
+            navigationHistory = [];
+            setupType = '';
+            mainPriorityType = '';
+            weights = { economic: 33, human: 33, social: 34 };
+            totalPartners = 2;
+            currentPartnerIndex = 0;
+            currentQuestion = 1;
+            partnersData = [];
+            
+            // Очистить все выборы
+            document.querySelectorAll('.option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.checked = false;
+            });
+            document.querySelectorAll('.priority-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            
+            // Показать первый шаг
+            init();
+            showStep('setup-method');
+        }
+
+        // Инициализация при загрузке
+        window.onload = function() {
+            init();
+        };
     </script>
 </body>
 </html>
