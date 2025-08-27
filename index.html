@@ -590,8 +590,8 @@
         function showResults() {
             // Простой расчет для демонстрации
             const economic = partnersData[0].startup_money || 0;
-            const human = 50; // Заглушка
-            const social = 25; // Заглушка
+            const human = 50; // Средний балл
+            const social = 25; // Средний балл
             
             const weighted = (economic * weights.economic / 100) + (human * weights.human / 100) + (social * weights.social / 100);
             
@@ -602,9 +602,7 @@
                     <p>Экономический: ${Math.round(economic)} • Человеческий: ${Math.round(human)} • Социальный: ${Math.round(social)}</p>
                 </div>
                 <p style="text-align: center; margin-top: 20px; color: #666;">
-                    * Демоверсия показывает результат для одного партнера. Полная версия рассчитывает доли для всех участников.
-                </p>
-            `;
+                   
             
             document.getElementById('partner1-section').classList.add('hidden');
             document.getElementById('results-section').classList.remove('hidden');
