@@ -269,16 +269,127 @@
 
         <!-- Шаг 1: Выбор способа настройки -->
         <div class="section" id="setup-method">
-            <h2>🚀 Выберите способ настройки</h2>
+            <h2>Выберите способ настройки</h2>
             <div class="priority-buttons">
                 <div class="priority-btn" onclick="selectSetupMethod('quick')">
-                    <strong>⚡ Быстрая настройка</strong><br>
+                    <strong>Быстрая настройка</strong><br>
                     Готовые варианты для разных типов бизнеса
                 </div>
                 <div class="priority-btn" onclick="selectSetupMethod('custom')">
-                    <strong>🎯 Индивидуальная настройка</strong><br>
+                    <strong>Индивидуальная настройка</strong><br>
                     Настройте приоритеты под ваш проект
                 </div>
+            </div>
+        </div>
+
+        <!-- Блок быстрой настройки -->
+        <div class="section hidden" id="quick-setup">
+            <h2>Быстрая настройка</h2>
+            <p style="margin-bottom: 20px;">Выберите тип бизнеса, наиболее похожий на ваш:</p>
+            <div class="priority-buttons">
+                <div class="priority-btn" onclick="selectWeights(30, 50, 20)">
+                    <strong>IT-стартап</strong><br>
+                    Экономический: 30% • Человеческий: 50% • Социальный: 20%
+                </div>
+                <div class="priority-btn" onclick="selectWeights(20, 40, 40)">
+                    <strong>Консалтинг</strong><br>
+                    Экономический: 20% • Человеческий: 40% • Социальный: 40%
+                </div>
+                <div class="priority-btn" onclick="selectWeights(60, 30, 10)">
+                    <strong>Производство</strong><br>
+                    Экономический: 60% • Человеческий: 30% • Социальный: 10%
+                </div>
+            </div>
+            <div class="button-group">
+                <button class="btn btn-back" onclick="goBack()">Назад</button>
+                <div></div>
+            </div>
+        </div>
+
+        <!-- Шаг 1 индивидуальной настройки: Главный приоритет -->
+        <div class="section hidden" id="custom-setup">
+            <h2>Шаг 1: Главный приоритет</h2>
+            <p style="margin-bottom: 20px;">Что важнее всего для успеха вашего проекта?</p>
+            <div class="priority-buttons" id="main-priority">
+                <div class="priority-btn" onclick="selectMainPriority('economic')">
+                    <strong>Деньги и активы</strong><br>
+                    Стартовый капитал, оборудование, инвестиции
+                </div>
+                <div class="priority-btn" onclick="selectMainPriority('human')">
+                    <strong>Время и навыки</strong><br>
+                    Экспертиза, опыт, рабочее время партнеров
+                </div>
+                <div class="priority-btn" onclick="selectMainPriority('social')">
+                    <strong>Связи и репутация</strong><br>
+                    Клиентская база, полезные контакты
+                </div>
+            </div>
+            <div class="button-group">
+                <button class="btn btn-back" onclick="goBack()">Назад</button>
+                <button class="btn" onclick="proceedToMainPercent()" id="continue-btn" style="display: none;">Продолжить</button>
+            </div>
+        </div>
+
+        <!-- Шаг 2: Процент для главного приоритета -->
+        <div class="section hidden" id="main-percent">
+            <h2>Шаг 2: Процент для главного приоритета</h2>
+            <p id="main-priority-text" style="margin-bottom: 20px;"></p>
+            <div class="input-group">
+                <label for="main-percentage">Введите процент (от 40 до 80):</label>
+                <input type="number" id="main-percentage" min="40" max="80" placeholder="например, 60">
+            </div>
+            <div class="button-group">
+                <button class="btn btn-back" onclick="goBack()">Назад</button>
+                <button class="btn" onclick="setMainPercentage()">Продолжить</button>
+            </div>
+        </div>
+
+        <!-- Шаг 3: Второй приоритет -->
+        <div class="section hidden" id="second-priority">
+            <h2>Шаг 3: Второй приоритет</h2>
+            <div class="weights-display">
+                <p><span id="first-priority-name"></span>: <strong><span id="first-percent">0</span>%</strong></p>
+                <p>Осталось распределить: <strong><span id="remaining-percent">100</span>%</strong></p>
+            </div>
+            <p style="margin-bottom: 20px;">Что поставите на второе место?</p>
+            <div class="priority-buttons" id="second-priority-options"></div>
+            <div class="button-group">
+                <button class="btn btn-back" onclick="goBack()">Назад</button>
+                <div></div>
+            </div>
+        </div>
+
+        <!-- Шаг 4: Процент для второго приоритета -->
+        <div class="section hidden" id="second-percent">
+            <h2>Шаг 4: Процент для второго приоритета</h2>
+            <div class="weights-display">
+                <p><span id="first-priority-name2"></span>: <strong><span id="first-percent2">0</span>%</strong></p>
+                <p>Осталось: <strong><span id="remaining-percent2">100</span>%</strong></p>
+            </div>
+            <p id="second-priority-text" style="margin-bottom: 20px;"></p>
+            <div class="input-group">
+                <label for="second-percentage">Введите процент (от 10 до <span id="max-second">90</span>):</label>
+                <input type="number" id="second-percentage" min="10" placeholder="например, 30">
+            </div>
+            <div class="button-group">
+                <button class="btn btn-back" onclick="goBack()">Назад</button>
+                <button class="btn" onclick="setSecondPercentage()">Продолжить</button>
+            </div>
+        </div>
+
+        <!-- Шаг 5: Итоговое распределение -->
+        <div class="section hidden" id="final-weights">
+            <h2>Ваше распределение весов</h2>
+            <div class="weights-display">
+                <p>Экономический: <strong><span id="final-economic">0</span>%</strong></p>
+                <p>Человеческий: <strong><span id="final-human">0</span>%</strong></p>
+                <p>Социальный: <strong><span id="final-social">0</span>%</strong></p>
+                <hr style="margin: 15px 0;">
+                <p><strong>Итого: 100%</strong></p>
+            </div>
+            <div class="button-group">
+                <button class="btn btn-back" onclick="goBack()">Назад</button>
+                <button class="btn" onclick="showPartnerSelection()">Продолжить к оценке партнеров</button>
             </div>
         </div>
 
@@ -560,16 +671,30 @@
         // Глобальные переменные
         let currentStep = 'setup-method';
         let navigationHistory = [];
+        let mainPriorityType = '';
+        let secondPriorityType = '';
         let weights = { economic: 33, human: 33, social: 34 };
         let totalPartners = 2;
         let currentPartnerIndex = 0;
         let currentQuestion = 1;
         let partnersData = [];
 
+        const priorityNames = {
+            'economic': 'Экономический капитал',
+            'human': 'Человеческий капитал', 
+            'social': 'Социальный капитал'
+        };
+
         const stepProgress = {
             'setup-method': 10,
-            'partner-count-section': 50,
-            'partner-evaluation': 80,
+            'quick-setup': 20,
+            'custom-setup': 20,
+            'main-percent': 30,
+            'second-priority': 40,
+            'second-percent': 50,
+            'final-weights': 60,
+            'partner-count-section': 70,
+            'partner-evaluation': 85,
             'results-section': 100
         };
 
@@ -621,12 +746,121 @@
 
         function selectSetupMethod(type) {
             if (type === 'quick') {
-                // Быстрая настройка - используем готовые значения
-                weights = { economic: 30, human: 50, social: 20 };
+                navigateTo('quick-setup');
             } else {
-                // Индивидуальная настройка - равные веса по умолчанию
-                weights = { economic: 33, human: 33, social: 34 };
+                navigateTo('custom-setup');
             }
+        }
+
+        function selectWeights(economic, human, social) {
+            weights = { economic, human, social };
+            navigateTo('partner-count-section');
+        }
+
+        function selectMainPriority(type) {
+            mainPriorityType = type;
+            
+            // Подсветить выбор
+            document.querySelectorAll('#main-priority .priority-btn').forEach((btn, index) => {
+                btn.classList.remove('selected');
+                if ((index === 0 && type === 'economic') || 
+                    (index === 1 && type === 'human') || 
+                    (index === 2 && type === 'social')) {
+                    btn.classList.add('selected');
+                }
+            });
+            
+            // Показать кнопку "Продолжить"
+            document.getElementById('continue-btn').style.display = 'block';
+        }
+
+        function proceedToMainPercent() {
+            document.getElementById('main-priority-text').textContent = 
+                `${priorityNames[mainPriorityType]} - ваш главный приоритет. Какой процент отдать этому направлению?`;
+            
+            navigateTo('main-percent');
+        }
+
+        function setMainPercentage() {
+            const percentage = parseInt(document.getElementById('main-percentage').value);
+            
+            if (!percentage || percentage < 40 || percentage > 80) {
+                alert('Пожалуйста, введите процент от 40 до 80');
+                return;
+            }
+
+            // Показать второй приоритет
+            document.getElementById('first-priority-name').textContent = priorityNames[mainPriorityType];
+            document.getElementById('first-percent').textContent = percentage;
+            document.getElementById('remaining-percent').textContent = 100 - percentage;
+
+            // Создать кнопки для оставшихся приоритетов
+            const secondOptions = document.getElementById('second-priority-options');
+            secondOptions.innerHTML = '';
+
+            const remainingPriorities = Object.keys(priorityNames).filter(p => p !== mainPriorityType);
+            
+            remainingPriorities.forEach(priority => {
+                const btn = document.createElement('div');
+                btn.className = 'priority-btn';
+                btn.innerHTML = `<strong>${priorityNames[priority]}</strong>`;
+                btn.onclick = () => selectSecondPriority(priority, percentage);
+                secondOptions.appendChild(btn);
+            });
+
+            navigateTo('second-priority');
+        }
+
+        function selectSecondPriority(type, firstPercent) {
+            secondPriorityType = type;
+            
+            // Подсветить выбор
+            document.querySelectorAll('#second-priority-options .priority-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            event.target.classList.add('selected');
+
+            document.getElementById('first-priority-name2').textContent = priorityNames[mainPriorityType];
+            document.getElementById('first-percent2').textContent = firstPercent;
+            document.getElementById('remaining-percent2').textContent = 100 - firstPercent;
+            document.getElementById('max-second').textContent = 100 - firstPercent - 10;
+
+            document.getElementById('second-priority-text').textContent = 
+                `${priorityNames[type]} - второй приоритет. Сколько процентов выделить?`;
+
+            document.getElementById('second-percentage').setAttribute('max', 100 - firstPercent - 10);
+            
+            navigateTo('second-percent');
+        }
+
+        function setSecondPercentage() {
+            const secondPercent = parseInt(document.getElementById('second-percentage').value);
+            const firstPercent = parseInt(document.getElementById('first-percent2').textContent);
+            const maxSecond = 100 - firstPercent - 10;
+
+            if (!secondPercent || secondPercent < 10 || secondPercent > maxSecond) {
+                alert(`Пожалуйста, введите процент от 10 до ${maxSecond}`);
+                return;
+            }
+
+            // Рассчитать финальное распределение
+            const thirdPercent = 100 - firstPercent - secondPercent;
+            const allPriorities = ['economic', 'human', 'social'];
+            const thirdType = allPriorities.find(p => p !== mainPriorityType && p !== secondPriorityType);
+
+            weights[mainPriorityType] = firstPercent;
+            weights[secondPriorityType] = secondPercent;
+            weights[thirdType] = thirdPercent;
+
+            // Показать финальное распределение
+            document.getElementById('final-economic').textContent = weights.economic;
+            document.getElementById('final-human').textContent = weights.human;
+            document.getElementById('final-social').textContent = weights.social;
+
+            navigateTo('final-weights');
+        }
+
+        function showPartnerSelection() {
             navigateTo('partner-count-section');
         }
 
